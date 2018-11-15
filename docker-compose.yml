@@ -4,7 +4,7 @@ services:
     build: app1
     image: app1:latest
     container_name: app1
-    ports: # expose if you don't want to enter manually in the container
+    ports: # expose if you don't want to query the container
       - "8000"
     command: python app.py
     restart: always
