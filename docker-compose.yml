@@ -1,0 +1,55 @@
+version: '3'
+services:
+  app1:
+    build: app1
+    image: app1:latest
+    container_name: app1
+    ports: # expose if you don't want to enter manually in the container
+      - "8000"
+    command: python app.py
+    restart: always
+    networks:
+      - web
+      - default
+    labels:
+      - "traefik.backend=app1"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:app1.tinycloud.fr"
+      - "traefik.port=8000"
+  app2:
+    build: app2
+    image: app2:latest
+    container_name: app2
+    ports:
+      - "8000"
+    command: python app.py
+    restart: always
+    networks:
+      - web
+      - default
+    labels:
+      - "traefik.backend=app2"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:app2.tinycloud.fr"
+      - "traefik.port=8000"
+  traefik:
+    image: traefik
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - "8080:8080" # The Web UI (enabled by --api). Deactivate for prod
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik_conf/traefik.toml:/traefik.toml
+      - ./traefik_conf/acme.json:/acme.json
+    container_name: traefik
+    command: --api # Enables the web UI. Deactivate for prod
+
+networks:
+  web:
+    external: true
