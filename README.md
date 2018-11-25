@@ -25,3 +25,4 @@ On the server:
 ## Remarks
 * In the *traefik_conf/traefik.toml* configuration file, a staging URL is used to get ACME certificate without reaching the rate limit during tests. Comment the line to get a production 
 certificate. To ignore the certificate, use the `-k` option with the *curl* command. Example: `curl -X GET "https://app1.tinycloud.fr" -Lk | jq`
+* The *traefik_conf/acme.json* file (which will contain the certificate) should be created with `chmod 600` permission.
